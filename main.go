@@ -19,8 +19,10 @@ import (
 
 func main() {
 	port := "8000"
-	if len(os.Args) > 1 {
-		port = os.Args[1]
+	host := "127.0.10.1"
+	if len(os.Args) > 2 {
+		host = os.Args[1]
+		port = os.Args[2]
 	}
 
 	err := os.Setenv("tls13", "1")
@@ -32,7 +34,7 @@ func main() {
 	router.HandleFunc("/check-status", CheckStatus).Methods("GET")
 	router.HandleFunc("/handle", Handle).Methods("POST")
 	fmt.Println("The proxy server is running")
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Fatal(http.ListenAndServe(host+":"+port, router))
 }
 
 func CheckStatus(responseWriter http.ResponseWriter, request *http.Request) {
